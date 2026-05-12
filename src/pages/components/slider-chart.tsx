@@ -8,6 +8,7 @@ import { dateFormat } from '@/utils/common';
 export interface SliderChartProp {
   y: string
   data: any[]
+  children?: React.ReactNode
 }
 
 export class SliderChart extends Component<SliderChartProp> {
@@ -27,20 +28,20 @@ export class SliderChart extends Component<SliderChartProp> {
   
   render() {
     let { children, ...chartProp } = this.props
-    let {data, y} = chartProp
-    if(!(data && data[0])) {
+    let { data: sourceData, y } = chartProp
+    if(!(sourceData && sourceData[0])) {
       return null
     }
     
     const ds = this.ds
     this.sliderTimeChange({
-      startText: data[0].date,
-      endText:  data[data.length - 1].date
+      startText: sourceData[0].date,
+      endText:  sourceData[sourceData.length - 1].date
     })
 
     // 数据格式化
     const dv = ds.createView();
-    dv.source(data)
+    dv.source(sourceData)
       .transform({
         // 过滤出 slider 的时间范围的数据
         type: "filter",
@@ -50,11 +51,11 @@ export class SliderChart extends Component<SliderChartProp> {
         }
       })
 
-    data = dv
+    const filteredData = dv as any
     const childrenWithProps = React.Children.map(this.props.children,
       (child) => React.cloneElement(child as any, {
         ...chartProp,
-        data
+        data: filteredData
       } ));
 
     return <div>
@@ -73,7 +74,7 @@ export class SliderChart extends Component<SliderChartProp> {
               type: "timeCat",
             }
           }}
-          data={data}
+          data={filteredData}
           onChange={this.sliderTimeChange}
         />
       </div>

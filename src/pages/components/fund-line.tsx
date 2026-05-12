@@ -26,7 +26,7 @@ import {
   Facet,
   Util
 } from "bizcharts";
-import { InvestmentStrategy, InvestDateSnapshot } from '@/utils/fund-stragegy/index.ts';
+import { InvestmentStrategy, InvestDateSnapshot } from '@/utils/fund-stragegy/index';
 import { TotalAmountChart, AmountProp } from './total-amount'
 import { FundValChart } from './fund-val'
 import { RateChart } from './rate'
@@ -68,7 +68,7 @@ export class FundChart extends Component<{data: InvestDateSnapshot[]}> {
   commonProp: AmountProp['commonProp'] = {
     chart: {
       forceFit: true,
-      height: 450, 
+      height: 520,
       padding: [
         20, 80, 100, 80
       ]

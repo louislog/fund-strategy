@@ -1,12 +1,75 @@
 
 .normal {
-  font-family: Georgia, sans-serif;
-  margin-top: 4em;
-  text-align: center;
-
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'PingFang SC', 'Microsoft YaHei', sans-serif;
   margin: 0 auto;
-  /* max-width: 1200px; */
-  max-width: 90vw;
+  max-width: 100%;
+}
+
+/* 桌面：左大图 + 右侧 sticky 参数；窄屏纵向堆叠，图表在上 */
+.backtestWorkspace {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 20px;
+  width: 100%;
+}
+
+.backtestChartCol {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+}
+
+.backtestFormCol {
+  width: clamp(308px, 30vw, 400px);
+  flex-shrink: 0;
+  position: sticky;
+  top: 12px;
+  align-self: flex-start;
+  max-height: calc(100vh - 40px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-right: 2px;
+}
+
+.backtestFormCol :global(.ant-card-head-title) {
+  font-size: 15px;
+}
+
+.backtestFormCol :global(.ant-tabs-bar) {
+  margin-bottom: 12px;
+}
+
+.backtestFormCol :global(.ant-tabs-nav .ant-tabs-tab) {
+  padding: 8px 10px;
+  font-size: 12px;
+}
+
+@media screen and (max-width: 992px) {
+  .backtestWorkspace {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .backtestFormCol {
+    width: 100%;
+    position: relative;
+    top: auto;
+    max-height: none;
+    overflow: visible;
+    order: 2;
+    padding-right: 0;
+  }
+
+  .backtestChartCol {
+    order: 1;
+  }
+}
+
+.contentCard {
+  border-radius: 2px;
 }
 
 .welcome {

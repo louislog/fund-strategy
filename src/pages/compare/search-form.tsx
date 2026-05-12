@@ -1,18 +1,15 @@
 
 
 import React, {Component} from 'react'
-import Form from 'antd/es/form';
+import Form, { FormComponentProps } from '@ant-design/compatible/es/form';
+import type { GetFieldDecoratorOptions } from '@ant-design/compatible/es/form/Form';
 import Card from 'antd/es/card'
 import Checkbox from 'antd/es/checkbox'
-import Row from 'antd/es/row'
-import Col from 'antd/es/col'
 import DatePicker from 'antd/es/date-picker'
 import Button from 'antd/es/button'
 
-import { FormComponentProps } from 'antd/lib/form';
 import { allSavedCondition } from '../components/saved-search';
-import moment from 'moment'
-import { GetFieldDecoratorOptions } from 'antd/lib/form/Form';
+import moment from 'moment';
 import { dateFormat, disabledFuture } from '@/utils/common';
 
 import {keyTextMap} from '../components/fund-line'

@@ -6,6 +6,7 @@
 import { FundJson } from "../../../tools/get-fund-data-json"
 import { dateFormat, roundToFix } from "../common"
 import { FundDataItem, IndexData } from './fetch-fund-data'
+import { Transaction } from './types'
 // import FundDataJson from './static/景顺长城新兴成长混合260108.json'
 const ONE_DAY = 24 * 60 * 60 * 1000
 
@@ -28,7 +29,7 @@ export interface FixedInvestOption {
   fixedInvestment: {
     amount: number // 每次定投金额
     dateOrWeek: number // 每周周几，每月几号定投
-    period: 'weekly' | 'monthly'   // 每周，每月，每 2 周定投
+    period: 'weekly' | 'monthly' | 'tradingDay'   // 每周，每月，每个交易日
   }, 
   range: [string| Date, string| Date]
 }
@@ -78,6 +79,10 @@ export class InvestmentStrategy {
    * 该基金策略下运行的每个交易日的数据
    */
   data: InvestDateSnapshot[] = []
+  /**
+   * 交易流水（由策略执行层写入）
+   */
+  transactions: Transaction[] = []
   /**
    * 标识日期-数据
    */
@@ -132,6 +137,10 @@ export class InvestmentStrategy {
       return now.getDate() === fixedInvestment.dateOrWeek
     } else if(fixedInvestment.period === 'weekly') {
       return now.getDay() === fixedInvestment.dateOrWeek
+    } else if(fixedInvestment.period === 'tradingDay') {
+      const dateStr = dateFormat(date)
+      // 基金净值源数据存在该日期，则认为是交易日（周末/节假日通常不存在）
+      return Boolean(this.fundJson.all[dateStr])
     } else {
       return false 
     }

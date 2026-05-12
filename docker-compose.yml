@@ -1,0 +1,13 @@
+# 生产：构建静态站并由 Nginx 提供 /fund/ 应用
+# 启动：docker compose up -d --build
+# 访问：http://localhost:8000/fund/  （端口映射见下方）
+services:
+  fund-strategy:
+    container_name: fund_strategy_instance
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    ports:
+      - "8000:80"
+    restart: unless-stopped

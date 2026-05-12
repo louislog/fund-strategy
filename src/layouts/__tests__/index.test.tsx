@@ -1,16 +1,30 @@
 import 'jest';
-import BasicLayout from '..';
+
+jest.mock('@umijs/max', () => {
+  const React = require('react');
+  return {
+    Outlet: () => React.createElement('div', { 'data-testid': 'outlet' }, 'outlet-child'),
+  };
+});
+
+jest.mock('antd/es/menu', () => {
+  const React = require('react');
+  const Menu = ({ children }: { children?: React.ReactNode }) =>
+    React.createElement('div', { 'data-testid': 'mock-menu' }, children);
+  Menu.Item = ({ children }: { children?: React.ReactNode }) =>
+    React.createElement('span', {}, children);
+  return { __esModule: true, default: Menu };
+});
+
+import BasicLayout from '../BasicLayout';
 import React from 'react';
-import renderer, { ReactTestInstance, ReactTestRenderer } from 'react-test-renderer';
+import renderer from 'react-test-renderer';
 
 describe('Layout: BasicLayout', () => {
-  it('Render correctly', () => {
-    const wrapper: ReactTestRenderer = renderer.create(<BasicLayout />);
-    expect(wrapper.root.children.length).toBe(1);
-    const outerLayer = wrapper.root.children[0] as ReactTestInstance;
-    expect(outerLayer.type).toBe('div');
-    const title = outerLayer.children[0] as ReactTestInstance;
-    expect(title.type).toBe('h1');
-    expect(title.children[0]).toBe('Yay! Welcome to umi!');
+  it('renders shell with Outlet', () => {
+    const wrapper = renderer.create(<BasicLayout />);
+    const json = wrapper.toJSON();
+    expect(json).toBeTruthy();
+    expect(json?.type).toBe('div');
   });
 });

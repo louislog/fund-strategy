@@ -18,10 +18,15 @@
 - [背景](#背景)
 - [安装](#安装)
 - [开发](#开发)
+- [开发计划文档](#开发计划文档)
 - [使用说明](#使用说明)
   - [基础回测功能](#基础回测功能)
   - [策略对比](#策略对比)
 - [感谢](#感谢)
+
+## 开发计划文档
+
+开发计划已固化在仓库内：`docs/DEV_PLAN.md`
 
 
 ## 背景
@@ -59,6 +64,11 @@ docker build -t fund_strategy .
 镜像构建完毕后运行
 ```
 docker run -dp 8000:8000 fund_strategy --name="fund_strategy_instance"
+```
+
+也可以使用 `docker compose` 一键构建并启动（推荐）：
+```
+docker compose up -d --build
 ```
 
 等待项目启动过程中，可通过以下命令查看启动日志：

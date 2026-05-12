@@ -1,42 +1,23 @@
-import { IConfig } from 'umi-types';
+import { defineConfig } from '@umijs/max';
 
-// ref: https://umijs.org/config/
-const config: IConfig =  {
-  treeShaking: true,
-  history: 'hash',
+// Umi 4 + Webpack 5：https://umijs.org/
+export default defineConfig({
+  title: '基金定投策略分析',
+  /** 禁用 Max 自带的 ProLayout，否则与手写顶栏叠加会出现双标题栏 */
+  layout: false,
+  history: { type: 'hash' },
   publicPath: '/fund/',
+  npmClient: 'npm',
+  antd: {},
   routes: [
     {
       path: '/',
-      component: '../layouts/index',
+      component: '@/layouts/BasicLayout',
       routes: [
-        { path: '/', component: '../pages/index' },
-        { path: '/compare', component: '../pages/compare/compare' }
-      ]
-    }
+        { path: '/', component: '@/pages/index' },
+        { path: '/compare', component: '@/pages/compare/compare' },
+        { path: '/portfolio', component: '@/pages/portfolio/index' },
+      ],
+    },
   ],
-
-  plugins: [
-    // ref: https://umijs.org/plugin/umi-plugin-react.html
-    ['umi-plugin-react', {
-      antd: true,
-      dva: true,
-      dynamicImport: true,
-      title: '基金定投策略分析',
-      dll: true,
-      
-      routes: {
-        exclude: [
-          /models\//,
-          /services\//,
-          /model\.(t|j)sx?$/,
-          /service\.(t|j)sx?$/,
-          /components\//,
-        ],
-      },
-    }],
-  ],
-  
-}
-
-export default config;
+});

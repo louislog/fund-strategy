@@ -8,7 +8,7 @@ import Tag from 'antd/es/tag';
 import Popover from 'antd/es/popover';
 import Button from 'antd/es/button';
 import { FundFormObj } from './search-form';
-import { WrappedFormUtils } from 'antd/lib/form/Form';
+import type { WrappedFormUtils } from '@ant-design/compatible/es/form';
 import { dateFormat } from  '@/utils/common'
 
 interface SavedSearchProp {

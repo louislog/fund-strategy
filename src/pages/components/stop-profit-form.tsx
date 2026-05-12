@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { FundFormObj } from './search-form';
-import Form, { FormComponentProps } from 'antd/lib/form';
+import Form, { FormComponentProps } from '@ant-design/compatible/es/form';
 import Divider from 'antd/es/divider'
 import InputNumber from 'antd/es/input-number'
 import Switch from 'antd/es/switch'
@@ -12,11 +12,11 @@ import throttle from 'lodash/throttle'
 
 
 const { Option } = Select
-interface StopProfitFormProp {
-  // form: 
+interface StopProfitFormProp extends FormComponentProps<FundFormObj> {
+  compactSidebar?: boolean
 }
 
-export class StopProfitForm extends Component<FormComponentProps<FundFormObj>>{
+export class StopProfitForm extends Component<StopProfitFormProp>{
   state = {
     searchIndexData:  [] as SearchIndexResp[] 
   }
@@ -34,17 +34,18 @@ export class StopProfitForm extends Component<FormComponentProps<FundFormObj>>{
 
   render() {
     const { searchIndexData } = this.state
+    const compact = this.props.compactSidebar
     const formItemLayout = {
       style: {
-        width: 500
+        width: compact ? '100%' : 500,
       },
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 8 },
+        sm: { span: compact ? 24 : 8 },
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 16 },
+        sm: { span: compact ? 24 : 16 },
       },
     };
     const { getFieldDecorator, getFieldsValue } = this.props.form;
@@ -148,6 +149,85 @@ export class StopProfitForm extends Component<FormComponentProps<FundFormObj>>{
           parser={value => (value || '').replace('%', '')}  min={0} max={100} placeholder="macd 止盈点" />
         )
         }
+        </Form.Item>
+
+        <Divider orientation="left" style={{ marginTop: 8 }}>分批 / 回撤止盈（可选）</Divider>
+        <Form.Item {...formItemLayout} label="分批止盈">
+          {getFieldDecorator<FundFormObj>('batchTpEnabled', {
+            valuePropName: 'checked',
+            initialValue: false,
+          })(
+            <Switch checkedChildren="开" unCheckedChildren="关" />
+          )}
+        </Form.Item>
+        <Form.Item {...formItemLayout} label="收益率 ≥ (%) 时卖出">
+          {getFieldDecorator<FundFormObj>('batchTpMinProfitPercent', {
+            initialValue: 8,
+          })(
+            <InputNumber style={{ width: '100%' }} min={0} placeholder="达到该持有收益率则触发" />
+          )}
+        </Form.Item>
+        <Form.Item {...formItemLayout} label="分批卖出金额">
+          <Row>
+            <Col span={12}>
+              {getFieldDecorator<FundFormObj>('batchTpSellNum', {
+                initialValue: 10,
+              })(
+                <InputNumber style={{ width: '100%' }} min={0} max={fieldsVal.batchTpSellUnit === 'fundPercent' ? 100 : undefined} placeholder="数量" />
+              )}
+            </Col>
+            <Col span={12}>
+              <Form.Item style={{ marginBottom: 'unset' }}>
+                {getFieldDecorator<FundFormObj>('batchTpSellUnit', {
+                  initialValue: 'fundPercent',
+                })(
+                  <Select>
+                    <Option value="amount">元</Option>
+                    <Option value="fundPercent">% 持有份额</Option>
+                  </Select>
+                )}
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form.Item>
+
+        <Form.Item {...formItemLayout} label="回撤止盈">
+          {getFieldDecorator<FundFormObj>('ddTpEnabled', {
+            valuePropName: 'checked',
+            initialValue: false,
+          })(
+            <Switch checkedChildren="开" unCheckedChildren="关" />
+          )}
+        </Form.Item>
+        <Form.Item {...formItemLayout} label="自累计收益峰值回撤 ≥ (%)">
+          {getFieldDecorator<FundFormObj>('ddTpPullbackFromPeakPercent', {
+            initialValue: 15,
+          })(
+            <InputNumber style={{ width: '100%' }} min={1} max={100} placeholder="从峰值回落比例" />
+          )}
+        </Form.Item>
+        <Form.Item {...formItemLayout} label="回撤止盈卖出">
+          <Row>
+            <Col span={12}>
+              {getFieldDecorator<FundFormObj>('ddTpSellNum', {
+                initialValue: 10,
+              })(
+                <InputNumber style={{ width: '100%' }} min={0} max={fieldsVal.ddTpSellUnit === 'fundPercent' ? 100 : undefined} placeholder="数量" />
+              )}
+            </Col>
+            <Col span={12}>
+              <Form.Item style={{ marginBottom: 'unset' }}>
+                {getFieldDecorator<FundFormObj>('ddTpSellUnit', {
+                  initialValue: 'fundPercent',
+                })(
+                  <Select>
+                    <Option value="amount">元</Option>
+                    <Option value="fundPercent">% 持有份额</Option>
+                  </Select>
+                )}
+              </Form.Item>
+            </Col>
+          </Row>
         </Form.Item>
     </section>
   }
