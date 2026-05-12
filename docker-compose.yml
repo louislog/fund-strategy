@@ -1,6 +1,5 @@
-# 生产：构建静态站并由 Nginx 提供 /fund/ 应用
-# 启动：docker compose up -d --build
-# 访问：http://localhost:8000/fund/  （端口映射见下方）
+# 局域网：其他设备用 http://<本机局域网IP>:8000/fund/ 访问（防火墙需放行 8000）
+# 开发：npm start 已默认 HOST=0.0.0.0，局域网可访问 http://<本机IP>:8000/fund/（端口以控制台为准）
 services:
   fund-strategy:
     container_name: fund_strategy_instance
@@ -9,5 +8,5 @@ services:
       dockerfile: Dockerfile
       target: production
     ports:
-      - "8000:80"
+      - "8888:80"
     restart: unless-stopped

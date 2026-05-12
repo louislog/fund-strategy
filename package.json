@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "start": "max dev",
+    "start": "HOST=0.0.0.0 max dev",
     "build": "max build",
     "test": "jest",
     "sprint1:golden": "node -r ./tools/node-fund-polyfill.cjs ./node_modules/.bin/ts-node -r tsconfig-paths/register tools/sprint1-golden-compare.ts",
